@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  db:
+    image: pgvector/pgvector:0.8.1-pg18-trixie
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8543:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_SERVER_JSON_FILE: /config/config.json
+    volumes:
+      - ./pgadmin:/config
+
+volumes:
+  postgresml_data:
