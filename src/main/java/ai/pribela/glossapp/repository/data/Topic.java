@@ -6,7 +6,8 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +24,11 @@ public class Topic {
 
     public Topic(String name) {
         this.name = name;
+    }
+
+    public void addWord(Word word) {
+        words.add(word);
+        word.setTopic(this);
     }
 
 }
