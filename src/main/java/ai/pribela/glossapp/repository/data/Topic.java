@@ -19,7 +19,7 @@ public class Topic {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "topic")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "topic")
     private List<Word> words;
 
     public Topic(String name) {

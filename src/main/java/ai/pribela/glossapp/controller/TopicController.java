@@ -2,8 +2,6 @@ package ai.pribela.glossapp.controller;
 
 import ai.pribela.glossapp.dto.TopicDto;
 import ai.pribela.glossapp.dto.TopicListDto;
-import ai.pribela.glossapp.repository.TopicRepository;
-import ai.pribela.glossapp.repository.WordRepository;
 import ai.pribela.glossapp.repository.data.Topic;
 import ai.pribela.glossapp.service.TopicService;
 import org.springframework.http.HttpStatus;
