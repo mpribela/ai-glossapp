@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/topic/{topicId}/word")
+@RequestMapping("/api/topic/{topicId}/word")
 public class WordController {
 
     private final WordService wordService;

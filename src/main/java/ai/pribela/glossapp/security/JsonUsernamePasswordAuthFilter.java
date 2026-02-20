@@ -3,7 +3,6 @@ package ai.pribela.glossapp.security;
 import ai.pribela.glossapp.dto.LoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpMethod;
@@ -27,13 +26,13 @@ public class JsonUsernamePasswordAuthFilter extends AbstractAuthenticationProces
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
     public JsonUsernamePasswordAuthFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper) {
-        super(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/login"));
+        super(PathPatternRequestMatcher.withDefaults().matcher(HttpMethod.POST, "/api/login"));
         this.objectMapper = objectMapper;
         setAuthenticationManager(authenticationManager);
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
         if (request.getContentType() == null || !request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
             throw new IllegalArgumentException("Content-Type must be application/json");
         }
@@ -43,7 +42,7 @@ public class JsonUsernamePasswordAuthFilter extends AbstractAuthenticationProces
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authResult);
         SecurityContextHolder.setContext(context);
@@ -54,7 +53,7 @@ public class JsonUsernamePasswordAuthFilter extends AbstractAuthenticationProces
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

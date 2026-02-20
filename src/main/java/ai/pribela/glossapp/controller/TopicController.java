@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/topic")
+@RequestMapping("/api/topic")
 public class TopicController {
 
     private final TopicService topicService;
