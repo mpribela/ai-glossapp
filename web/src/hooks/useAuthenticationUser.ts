@@ -2,11 +2,10 @@ import {useAuth0} from "@auth0/auth0-react";
 import {useEffect, useState} from "react";
 
 export function useAuthenticationUser() {
-    const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+    const {user, isAuthenticated, isLoading, getAccessTokenSilently} = useAuth0();
     const [accessToken, setAccessToken] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log("useAuthenticationUser useEffect");
         if (isAuthenticated && !isLoading) {
             getAccessTokenSilently()
                 .then(token => setAccessToken(token))
