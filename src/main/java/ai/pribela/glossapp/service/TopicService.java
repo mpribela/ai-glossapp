@@ -25,14 +25,14 @@ public class TopicService {
     }
 
     //todo pagination
-    public List<Topic> getAllTopics() {
-        return topicRepository.findAll();
+    public List<Topic> getAllTopics(Long learnerId) {
+        return topicRepository.findAllByLearnerId(learnerId);
     }
 
-    public Topic createTopic(TopicDto createTopicDto) {
-        Topic topicToCreate = new Topic(createTopicDto.topic());
+    public Topic createTopic(TopicDto createTopicDto, Long learnerId) {
+        Topic topicToCreate = new Topic(createTopicDto.topic(), learnerId);
         topicToCreate = topicRepository.save(topicToCreate);
-        log.info("Created topic {} with ID {}.", topicToCreate.getName(), topicToCreate.getId());
+        log.info("Created topic {} with ID {} by learner with ID {}.", topicToCreate.getName(), topicToCreate.getId(), learnerId);
         return topicToCreate;
     }
 

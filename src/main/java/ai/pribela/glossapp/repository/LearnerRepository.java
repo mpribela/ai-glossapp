@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface LearnerRepository extends CrudRepository<Learner, Long> {
-    Optional<Learner> findByUsername(String username);
+    Optional<Learner> findByAuth0Id(String auth0Id);
 }

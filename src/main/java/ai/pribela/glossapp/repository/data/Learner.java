@@ -14,24 +14,20 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Learner implements UserDetails {
+public class Learner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, name = "auth0_id")
+    private String auth0Id;
+
     @Column(unique = true)
     private String username;
 
-    private String password;
-
-    public Learner(String username, String password) {
+    public Learner(String username, String auth0Id) {
         this.username = username;
-        this.password = password;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        this.auth0Id = auth0Id;
     }
 
 }

@@ -19,11 +19,14 @@ public class Topic {
     @Column(name = "name")
     private String name;
 
+    private Long learnerId;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "topic")
     private List<Word> words;
 
-    public Topic(String name) {
+    public Topic(String name, Long learnerId) {
         this.name = name;
+        this.learnerId = learnerId;
     }
 
     public void addWord(Word word) {

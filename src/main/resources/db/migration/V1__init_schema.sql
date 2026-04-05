@@ -2,10 +2,19 @@ create extension if not exists vector;
 create extension if not exists hstore;
 create extension if not exists "uuid-ossp";
 
+create table learner
+(
+    id integer primary key generated always as identity,
+    auth0_id text unique not null,
+    username text unique not null
+);
+
 create table topic
 (
     id   integer primary key generated always as identity,
-    name text not null
+    name text not null,
+    learner_id integer,
+    constraint fk_learner foreign key (learner_id) references learner (id) on delete cascade
 );
 
 create table word
@@ -16,11 +25,4 @@ create table word
     constraint fk_topic foreign key (topic_id) references topic (id) on delete cascade
 );
 
-create table learner
-(
-    id integer primary key generated always as identity,
-    username text unique not null,
-    password text not null
-);
-
-insert into learner (username, password) values ('marek', '{bcrypt}$2a$12$SrDD4IFT/G0lRvxZfk4mSeCpoXJkjEwTlY4J2OmIxLHn0lp6GwA5a');
+insert into learner (auth0_id, username) values ('auth0|69d24846542f0db1a5791498','marek');

@@ -2,9 +2,11 @@ package ai.pribela.glossapp.controller;
 
 import ai.pribela.glossapp.dto.TopicDto;
 import ai.pribela.glossapp.dto.TopicListDto;
+import ai.pribela.glossapp.repository.data.Learner;
 import ai.pribela.glossapp.repository.data.Topic;
 import ai.pribela.glossapp.service.TopicService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,8 +24,8 @@ public class TopicController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public TopicListDto getTopics() {
-        List<Topic> topics = topicService.getAllTopics();
+    public TopicListDto getTopics(@AuthenticationPrincipal Learner learner) {
+        List<Topic> topics = topicService.getAllTopics(learner.getId());
         return new TopicListDto(topics.stream()
                 .map(TopicDto::new)
                 .toList());
@@ -38,8 +40,8 @@ public class TopicController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public TopicDto createTopic(@Valid @RequestBody TopicDto createTopicDto) {
-        Topic topic = topicService.createTopic(createTopicDto);
+    public TopicDto createTopic(@Valid @RequestBody TopicDto createTopicDto, @AuthenticationPrincipal Learner learner) {
+        Topic topic = topicService.createTopic(createTopicDto, learner.getId());
         return new TopicDto(topic);
     }
 
