@@ -1,11 +1,11 @@
 import {createFileRoute, redirect} from "@tanstack/react-router";
-import DashboardPage from "../pages/DashboardPage.tsx";
+import TopicsPage from "../pages/TopicsPage.tsx";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/topics")({
     beforeLoad: async ({context}) => {
         if (!context.auth.isAuthenticated) {
             throw redirect({to: "/"})
         }
     },
-    component: DashboardPage,
+    component: TopicsPage,
 });
