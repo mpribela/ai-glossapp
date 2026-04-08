@@ -9,11 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TopicsRouteImport } from './routes/topics'
+import { Route as TopicsRouteImport } from './routes/topics_'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TopicsNewRouteImport } from './routes/topics/new'
 
 const TopicsRoute = TopicsRouteImport.update({
-  id: '/topics',
+  id: '/topics_',
   path: '/topics',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -22,37 +23,46 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicsNewRoute = TopicsNewRouteImport.update({
+  id: '/topics/new',
+  path: '/topics/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/topics': typeof TopicsRoute
+  '/topics/new': typeof TopicsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/topics': typeof TopicsRoute
+  '/topics/new': typeof TopicsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/topics': typeof TopicsRoute
+  '/topics_': typeof TopicsRoute
+  '/topics/new': typeof TopicsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/topics'
+  fullPaths: '/' | '/topics' | '/topics/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/topics'
-  id: '__root__' | '/' | '/topics'
+  to: '/' | '/topics' | '/topics/new'
+  id: '__root__' | '/' | '/topics_' | '/topics/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TopicsRoute: typeof TopicsRoute
+  TopicsNewRoute: typeof TopicsNewRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/topics': {
-      id: '/topics'
+    '/topics_': {
+      id: '/topics_'
       path: '/topics'
       fullPath: '/topics'
       preLoaderRoute: typeof TopicsRouteImport
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topics/new': {
+      id: '/topics/new'
+      path: '/topics/new'
+      fullPath: '/topics/new'
+      preLoaderRoute: typeof TopicsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TopicsRoute: TopicsRoute,
+  TopicsNewRoute: TopicsNewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
