@@ -3,7 +3,8 @@ import {createRoot} from "react-dom/client";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {createRouter, RouterProvider} from "@tanstack/react-router";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {Auth0Provider, useAuth0} from "@auth0/auth0-react";
+import {Auth0Provider} from "@auth0/auth0-react";
+import {useAuthenticationUser} from "./hooks/useAuthenticationUser.ts";
 
 // Import the generated route tree
 import {routeTree} from "./routeTree.gen";
@@ -38,7 +39,7 @@ const theme = createTheme({
 });
 
 export function InnerApp() {
-    const {isAuthenticated} = useAuth0();
+    const {isAuthenticated} = useAuthenticationUser();
     return <RouterProvider router={router} context={{queryClient, auth: {isAuthenticated}}}/>;
 }
 
