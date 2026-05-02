@@ -5,4 +5,5 @@ const apiBaseUrl = import.meta.env.VITE_BASE_URL;
 
 export const api = {
     topics: apiBaseUrl + '/api/topic/all',
+    createTopic: apiBaseUrl + '/api/topic',
 }

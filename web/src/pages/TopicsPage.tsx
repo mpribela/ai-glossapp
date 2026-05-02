@@ -20,18 +20,40 @@ export default function TopicsPage() {
         enabled: !!accessToken,
     })
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" width="100%" height="100%"
-             sx={{padding: "0", margin: "0"}}>
+        <Box
+            sx={{
+                padding: "0",
+                margin: "0",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%"
+            }}>
             {isPending || accessToken === undefined
                 ?
-                <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center"
-                     height="calc(100vh - 4rem)" width="100%">
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "calc(100vs - 4rem)",
+                    width: "100%"
+                }}>
                     <CircularProgress/>
                 </Box>
                 : isSuccess
-                    ? <Box margin="2rem">
-                        <Stack direction="row" spacing={2} useFlexGap={true}
-                               sx={{flexWrap: 'wrap', overflow: "hidden", padding: "1rem"}} justifyContent="center">
+                    ? <Box sx={{margin: "2rem"}}>
+                        <Stack
+                            direction="row"
+                            spacing={2}
+                            sx={{
+                                flexWrap: 'wrap',
+                                overflow: "hidden",
+                                padding: "1rem",
+                                useFlexGap: "true",
+                                justifyContent: "center"
+                            }}>
                             {data.topics.map(topic => (
                                 <Card sx={{width: "10rem", height: "10rem", paddingTop: "1rem"}}>
                                     <CardContent>

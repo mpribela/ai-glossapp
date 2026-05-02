@@ -24,8 +24,8 @@ const RootLayout = () => (
 function Header() {
     const {isAuthenticated, logout} = useAuthenticationUser();
     return (
-        <Box height="3rem" display="flex" borderBottom="1px solid #006494" alignItems="center">
-            <Stack direction="row" marginX="1rem" width="100%" height="100%">
+        <Box sx={{height: "3rem", display: "flex", borderBottom: "1px solid #006494", alignItems: "center"}}>
+            <Stack direction="row" sx={{marginX: "1rem", width: "100%", height: "100%"}}>
                 <Button component={Link} to={"/"} startIcon={<HomeIcon/>} sx={{paddingX: "1rem"}}>Home</Button>
                 {isAuthenticated && <>
                     <Button component={Link} variant="text" to="/topics" sx={{paddingX: "1rem"}}>Topics</Button>

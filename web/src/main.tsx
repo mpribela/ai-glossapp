@@ -8,11 +8,13 @@ import {useAuthenticationUser} from "./hooks/useAuthenticationUser.ts";
 
 // Import the generated route tree
 import {routeTree} from "./routeTree.gen";
+import {CircularProgress} from "@mui/material";
 
 const queryClient = new QueryClient();
 
 export interface AuthContext {
     isAuthenticated: boolean;
+    isLoading: boolean;
 }
 
 // Create a new router instance with query client
@@ -39,8 +41,11 @@ const theme = createTheme({
 });
 
 export function InnerApp() {
-    const {isAuthenticated} = useAuthenticationUser();
-    return <RouterProvider router={router} context={{queryClient, auth: {isAuthenticated}}}/>;
+    const {isAuthenticated, isLoading} = useAuthenticationUser();
+    if (isLoading) {
+        return <CircularProgress/>;
+    }
+    return <RouterProvider router={router} context={{queryClient, auth: {isAuthenticated, isLoading}}}/>;
 }
 
 createRoot(document.getElementById("root")!).render(
@@ -50,6 +55,7 @@ createRoot(document.getElementById("root")!).render(
                 <Auth0Provider
                     domain={import.meta.env.VITE_AUTH0_DOMAIN}
                     clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+                    cacheLocation="localstorage"
                     authorizationParams={{
                         redirect_uri: window.location.origin,
                         audience: import.meta.env.VITE_AUTH0_AUDIENCE
