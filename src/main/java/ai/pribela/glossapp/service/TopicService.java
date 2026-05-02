@@ -1,9 +1,13 @@
 package ai.pribela.glossapp.service;
 
-import ai.pribela.glossapp.dto.TopicDto;
+import ai.pribela.glossapp.dto.CreateTopicRequestDTO;
+import ai.pribela.glossapp.dto.CreateTopicResponseDTO;
+import ai.pribela.glossapp.dto.agentic.WordsSuggestionAgenticResponse;
 import ai.pribela.glossapp.exception.TopicNotFoundException;
 import ai.pribela.glossapp.repository.TopicRepository;
+import ai.pribela.glossapp.repository.data.Learner;
 import ai.pribela.glossapp.repository.data.Topic;
+import ai.pribela.glossapp.service.exception.AgenticException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +18,11 @@ import java.util.List;
 public class TopicService {
 
     private final TopicRepository topicRepository;
+    private final AgentService agentService;
 
-    public TopicService(TopicRepository topicRepository) {
+    public TopicService(TopicRepository topicRepository, AgentService agentService) {
         this.topicRepository = topicRepository;
+        this.agentService = agentService;
     }
 
     public Topic getTopic(Long id) {
@@ -29,11 +35,21 @@ public class TopicService {
         return topicRepository.findAllByLearnerId(learnerId);
     }
 
-    public Topic createTopic(TopicDto createTopicDto, Long learnerId) {
-        Topic topicToCreate = new Topic(createTopicDto.topic(), learnerId);
-        topicToCreate = topicRepository.save(topicToCreate);
-        log.info("Created topic {} with ID {} by learner with ID {}.", topicToCreate.getName(), topicToCreate.getId(), learnerId);
-        return topicToCreate;
+    public CreateTopicResponseDTO createTopic(CreateTopicRequestDTO createTopicDto, Learner learner) {
+        var topicToCreate = new Topic(createTopicDto, learner.getId());
+        var createdTopic = topicRepository.save(topicToCreate);
+        log.info("Created topic {} with ID {} by learner with ID {}.", topicToCreate.getName(), topicToCreate.getId(), learner);
+        if (createTopicDto.getAISuggestions()) {
+            WordsSuggestionAgenticResponse suggestedWords;
+            try {
+                suggestedWords = agentService.getTopicWordsSuggestion(createTopicDto);
+            } catch (AgenticException e) {
+                throw new RuntimeException(e);
+            }
+            return new CreateTopicResponseDTO(createdTopic, suggestedWords);
+        } else {
+            return new CreateTopicResponseDTO(createdTopic);
+        }
     }
 
     public Topic deleteTopic(Long id) {
