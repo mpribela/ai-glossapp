@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 @Builder
-public record TopicDto(Long id, @NotBlank String topic, @NotBlank Long learnerId) {
+public record TopicDto(Long id, @NotBlank String topic, String description, @NotBlank Long learnerId) {
     public TopicDto(Topic topic) {
-        this(topic.getId(), topic.getName(), topic.getLearnerId());
+        this(topic.getId(), topic.getName(), topic.getDescription(), topic.getLearnerId());
     }
 }
