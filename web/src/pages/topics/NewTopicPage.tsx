@@ -4,8 +4,9 @@ import {z} from "zod";
 import {Controller, type SubmitHandler, useForm} from "react-hook-form"
 import {standardSchemaResolver} from "@hookform/resolvers/standard-schema";
 import {useMutation} from "@tanstack/react-query";
-import {api} from "../../api/types.ts";
+import {api, type TopicCreatedDTO} from "../../api/types.ts";
 import {useAuthenticationUser} from "../../hooks/useAuthenticationUser.ts";
+import {useNavigate} from "@tanstack/react-router";
 
 const formSchema = z.object({
     topic: z.string().min(3, "Topic must be at least 3 characters long."),
@@ -20,6 +21,7 @@ type Schema = z.infer<typeof formSchema>
 
 export function NewTopicPage() {
     const {accessToken} = useAuthenticationUser();
+    const navigate = useNavigate({ from: "/topics/new" });
 
     const mutation = useMutation({
         mutationFn: async (data: Schema) => {
@@ -39,6 +41,9 @@ export function NewTopicPage() {
             }
             return response.json()
         },
+        onSuccess: (data: TopicCreatedDTO) => {
+            navigate({ to: "/topics/$topicId", params: { topicId: String(data.id) }})
+        }
     })
 
     const {handleSubmit, register, control, formState: {errors, isSubmitting}} = useForm<Schema>({
@@ -56,7 +61,7 @@ export function NewTopicPage() {
     const onSubmit: SubmitHandler<Schema> = (data: Schema) => {
         mutation.mutate(data)
     }
-
+    //todo when isPendling show loader
     return (
         <Box sx={{display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100%"}}>
             <Stack component="form"
