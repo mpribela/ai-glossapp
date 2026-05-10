@@ -1,6 +1,6 @@
 package ai.pribela.glossapp.dto.agentic;
 
-public record VerbForm(
+public record VerbFormAgenticDTO(
         String form,
         String formType) {
 }

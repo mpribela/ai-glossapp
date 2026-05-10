@@ -26,10 +26,21 @@ create table word
     id          integer primary key generated always as identity,
     text        text not null,
     translation text not null,
+    notes    text,
     type        text,
     topic_id    integer,
     attributes  jsonb,
+    examples text[],
     constraint fk_topic foreign key (topic_id) references topic (id) on delete cascade
+);
+
+create table sentence
+(
+    id          integer primary key generated always as identity,
+    sentence    text,
+    translation text,
+    word_id     integer,
+    constraint fk_word foreign key (word_id) references word (id) on delete cascade
 );
 
 insert into learner (auth0_id, username)

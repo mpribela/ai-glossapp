@@ -24,43 +24,43 @@ public class AgentService {
         this.client = client;
     }
 
-    public WordsSuggestionAgenticResponse getTopicWordsSuggestion(CreateTopicRequestDTO request) throws AgenticException {
+    public WordsSuggestionAgenticResponseDTO getTopicWordsSuggestion(CreateTopicRequestDTO request) throws AgenticException {
         try (var scope = StructuredTaskScope.open(StructuredTaskScope.Joiner.awaitAll())) {
             var nouns = scope.fork(() -> fetchNouns(request));
             var verbs = scope.fork(() -> fetchVerbs(request));
             var adjectives = scope.fork(() -> fetchAdjectives(request));
             var adverbs = scope.fork(() -> fetchAdverbs(request));
             scope.join();
-            List<Noun> suggestedNouns = nouns.state() != SUCCESS ? null : nouns.get();
-            List<Verb> suggestedVerbs = verbs.state() != SUCCESS ? null : verbs.get();
-            List<Adjective> suggestedAdjectives = adjectives.state() != SUCCESS ? null : adjectives.get();
-            List<Adverb> suggestedAdverbs = adverbs.state() != SUCCESS ? null : adverbs.get();
+            List<NounAgenticDTO> suggestedNouns = nouns.state() != SUCCESS ? null : nouns.get();
+            List<VerbAgenticDTO> suggestedVerbs = verbs.state() != SUCCESS ? null : verbs.get();
+            List<AdjectiveAgenticDTO> suggestedAdjectives = adjectives.state() != SUCCESS ? null : adjectives.get();
+            List<AdverbAgenticDTO> suggestedAdverbs = adverbs.state() != SUCCESS ? null : adverbs.get();
             if (nouns.state() == FAILED && verbs.state() == FAILED && adjectives.state() == FAILED && adverbs.state() == FAILED) {
                 throw new AgenticException(List.of(nouns.exception(), verbs.exception(), adjectives.exception(), adverbs.exception()));
             }
-            return new WordsSuggestionAgenticResponse(suggestedNouns, suggestedVerbs, suggestedAdjectives, suggestedAdverbs);
+            return new WordsSuggestionAgenticResponseDTO(suggestedNouns, suggestedVerbs, suggestedAdjectives, suggestedAdverbs);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
     }
 
-    private List<Adjective> fetchAdjectives(CreateTopicRequestDTO request) {
+    private List<AdjectiveAgenticDTO> fetchAdjectives(CreateTopicRequestDTO request) {
         return fetchWords(request, "adjectives", new ParameterizedTypeReference<>() {
         });
     }
 
-    private List<Noun> fetchNouns(CreateTopicRequestDTO request) {
+    private List<NounAgenticDTO> fetchNouns(CreateTopicRequestDTO request) {
         return fetchWords(request, "nouns", new ParameterizedTypeReference<>() {
         });
     }
 
-    private List<Verb> fetchVerbs(CreateTopicRequestDTO request) {
+    private List<VerbAgenticDTO> fetchVerbs(CreateTopicRequestDTO request) {
         return fetchWords(request, "verbs", new ParameterizedTypeReference<>() {
         });
     }
 
-    private List<Adverb> fetchAdverbs(CreateTopicRequestDTO request) {
+    private List<AdverbAgenticDTO> fetchAdverbs(CreateTopicRequestDTO request) {
         return fetchWords(request, "adverbs", new ParameterizedTypeReference<>() {
         });
     }

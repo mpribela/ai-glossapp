@@ -1,7 +1,7 @@
 package ai.pribela.glossapp.controller;
 
 import ai.pribela.glossapp.dto.CreateTopicRequestDTO;
-import ai.pribela.glossapp.dto.CreateTopicResponseDTO;
+import ai.pribela.glossapp.dto.GetTopicDetailResponseDTO;
 import ai.pribela.glossapp.dto.TopicDto;
 import ai.pribela.glossapp.dto.TopicListDto;
 import ai.pribela.glossapp.repository.data.Learner;
@@ -35,28 +35,27 @@ public class TopicController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TopicDto getTopic(@PathVariable Long id) {
-        Topic topic = topicService.getTopic(id);
-        return new TopicDto(topic);
+    public GetTopicDetailResponseDTO getTopic(@PathVariable Long id, @AuthenticationPrincipal Learner learner) {
+        return topicService.getTopic(id, learner);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public CreateTopicResponseDTO createTopic(@Valid @RequestBody CreateTopicRequestDTO createTopicRequest, @AuthenticationPrincipal Learner learner) {
-        return topicService.createTopic(createTopicRequest, learner);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createTopic(@Valid @RequestBody CreateTopicRequestDTO createTopicRequest, @AuthenticationPrincipal Learner learner) {
+        topicService.createTopic(createTopicRequest, learner);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TopicDto editTopic(@PathVariable Long id, @RequestBody TopicDto editTopicDto) {
-        Topic editedTopic = topicService.editTopic(id, editTopicDto.topic());
+    public TopicDto editTopic(@PathVariable Long id, @RequestBody TopicDto editTopicDto, @AuthenticationPrincipal Learner learner) {
+        Topic editedTopic = topicService.editTopic(id, editTopicDto.topic(), learner);
         return new TopicDto(editedTopic);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public TopicDto deleteTopic(@PathVariable Long id) {
-        Topic deletedTopic = topicService.deleteTopic(id);
+    public TopicDto deleteTopic(@PathVariable Long id, @AuthenticationPrincipal Learner learner) {
+        Topic deletedTopic = topicService.deleteTopic(id, learner);
         return new TopicDto(deletedTopic);
     }
 

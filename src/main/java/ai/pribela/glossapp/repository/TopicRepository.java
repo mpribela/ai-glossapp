@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface TopicRepository extends ListCrudRepository<Topic, Long> {
     List<Topic> findAllByLearnerId(Long learnerId);
+
+    Optional<Topic> findByIdAndLearnerId(Long id, Long learnerId);
 }
