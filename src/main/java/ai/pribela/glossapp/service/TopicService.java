@@ -1,6 +1,7 @@
 package ai.pribela.glossapp.service;
 
 import ai.pribela.glossapp.dto.CreateTopicRequestDTO;
+import ai.pribela.glossapp.dto.CreateTopicResponseDTO;
 import ai.pribela.glossapp.dto.GetTopicDetailResponseDTO;
 import ai.pribela.glossapp.dto.agentic.WordsSuggestionAgenticResponseDTO;
 import ai.pribela.glossapp.dto.transformer.TopicDetailTransformer;
@@ -39,7 +40,7 @@ public class TopicService {
         return topicRepository.findAllByLearnerId(learnerId);
     }
 
-    public void createTopic(CreateTopicRequestDTO createTopicDto, Learner learner) {
+    public CreateTopicResponseDTO createTopic(CreateTopicRequestDTO createTopicDto, Learner learner) {
         var topicToCreate = new Topic(createTopicDto, learner.getId());
         if (createTopicDto.getAISuggestions()) {
             WordsSuggestionAgenticResponseDTO suggestedWords;
@@ -52,6 +53,7 @@ public class TopicService {
         }
         var createdTopic = topicRepository.save(topicToCreate);
         log.info("Created topic {} with ID {} by learner with ID {}.", createdTopic.getName(), createdTopic.getId(), learner);
+        return new CreateTopicResponseDTO(createdTopic.getId());
     }
 
     public Topic deleteTopic(Long id, Learner learner) {

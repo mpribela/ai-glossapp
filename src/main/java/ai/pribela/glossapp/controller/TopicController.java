@@ -1,9 +1,6 @@
 package ai.pribela.glossapp.controller;
 
-import ai.pribela.glossapp.dto.CreateTopicRequestDTO;
-import ai.pribela.glossapp.dto.GetTopicDetailResponseDTO;
-import ai.pribela.glossapp.dto.TopicDto;
-import ai.pribela.glossapp.dto.TopicListDto;
+import ai.pribela.glossapp.dto.*;
 import ai.pribela.glossapp.repository.data.Learner;
 import ai.pribela.glossapp.repository.data.Topic;
 import ai.pribela.glossapp.service.TopicService;
@@ -41,8 +38,8 @@ public class TopicController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createTopic(@Valid @RequestBody CreateTopicRequestDTO createTopicRequest, @AuthenticationPrincipal Learner learner) {
-        topicService.createTopic(createTopicRequest, learner);
+    public CreateTopicResponseDTO createTopic(@Valid @RequestBody CreateTopicRequestDTO createTopicRequest, @AuthenticationPrincipal Learner learner) {
+        return topicService.createTopic(createTopicRequest, learner);
     }
 
     @PutMapping("/{id}")
